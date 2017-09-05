@@ -44,16 +44,19 @@ cronometro.x = _W/2
 cronometro.y = 20
 cronometro:setTextColor( 0, 255, 0 )
  
-function fn_counter()
-number = number - 1
-cronometro.text = number
-if number <=10 then
-	cronometro:setTextColor( 255, 0, 0 )
-end	
+function contaTempo()
+	number = number - 1
+	cronometro.text = number
+	if number <=10 then
+		cronometro:setTextColor( 255, 0, 0 )
+	elseif number == 0 then
+		cronometro.text ="You Lost!!"
+		player:stop()
+	end	
 
 end
  
-timer.performWithDelay(1000, fn_counter, 120)
+timer.performWithDelay(1000, contaTempo	, 120)
 
 
 
@@ -63,7 +66,7 @@ timer.performWithDelay(1000, fn_counter, 120)
 
 
 
-
+--[[
 
 ---- parades para o player não ultrapassar os limites do cenario.
 wallTop = display.newRect(0,0,display.contentWidth*2,3)
@@ -81,6 +84,8 @@ fisica.addBody(wallTop,"static")
 fisica.addBody(wallBottom,"static")
 fisica.addBody(wallLeft,"static")
 fisica.addBody(wallRight,"static")
+
+]]--
 
 local sheetData = {width = 120, height= 120,numFrames=12}
 
