@@ -5,17 +5,65 @@ fisica.start()
 
 local largura = display.contentCenterX
 local altura = display.contentCenterY
-
+--[[
 local cenario1 = display.newImageRect("tronco.png", 400,550)
 cenario1.x = largura
 cenario1.y = altura
---[[
-local formigueiro = display.newImage("formigueiro.png",120,220)
-formigueiro.x = 280
-formigueiro.y = 490
-formigueiro.rotation = -90
 ]]--
+local formigueiro = display.newImage("formigueiro2.png",100,100)
+formigueiro.x = 280
+formigueiro.y = 470
+formigueiro.rotation = -90
+
+
+--[[
 display.setStatusBar(display.HiddenStatusBar)
+
+
+local cronometro = display.newText( tempo, 0, 0, native.systemFont, 16)
+cronometro.x = largura/2
+cronometro.y = altura/2
+cronometro:setTextColor( 0, 255, 0 )
+
+local timeDefault = 120 
+local tempo = timeDefault
+function contaTempo()
+  
+  tempo = tempo - 1
+  cronometro.text = tempo
+
+end
+ 
+timer.performWithDelay(1000, contaTempo)
+]]--
+
+display.setStatusBar(display.HiddenStatusBar) _W = display.contentWidth _H = display.contentHeight number = 60
+  
+local cronometro = display.newText( number, 0, 0, native.systemFont, 50 )
+cronometro.x = _W/2
+cronometro.y = 20
+cronometro:setTextColor( 0, 255, 0 )
+ 
+function fn_counter()
+number = number - 1
+cronometro.text = number
+if number <=10 then
+	cronometro:setTextColor( 255, 0, 0 )
+end	
+
+end
+ 
+timer.performWithDelay(1000, fn_counter, 120)
+
+
+
+
+
+
+
+
+
+
 
 ---- parades para o player não ultrapassar os limites do cenario.
 wallTop = display.newRect(0,0,display.contentWidth*2,3)
@@ -26,8 +74,6 @@ wallLeft = display.newRect(0,0,3,display.contentHeight)
 wallLeft:setFillColor(0,0,255)
 wallRight = display.newRect(display.contentWidth,0,3,display.contentHeight)
 wallRight:setFillColor(0,0,255)
-
-
 
 
 
@@ -51,16 +97,19 @@ local sequenceSprite =
 	-- time: tempo de duração da animação
 	-- numero e vezes que a animação é executada.
      {name = "IdleDown", start = 10, count = 1, time =  0, loopCount = 1},     
+	 
 	 {name = "IdleLeft", start = 4, count = 1, time =  0, loopCount = 1},     
+	 
 	 {name = "IdleRight", start = 7, count = 1, time =  0, loopCount = 1},     
-	 {name = "MoveUp", start = 2, frames = {2,3}, time =  300, loopCount = 0},     
-	 --{name = "MoveUp2", start = 3, count = 2, time =  300, loopCount = 1},
-	 {name = "MoveDown", start = 11, frames = {11,12}, time =  300, loopCount = 0},
-	 --{name = "MoveDown2", start = 12, count = 2, time =  300, loopCount = 1},
-	 {name = "MoveLeft", start = 5, frames = {5,6}, time =  300, loopCount = 0},
-	 --{name = "MoveLeft2", start = 6, count = 2, time =  300, loopCount = 1},
-	 {name = "MoveRight", start = 8, frames = {8,9}, time =  300, loopCount = 0},
-	 --{name = "MoveRight", start = 9, count = 2, time =  300, loopCount = 1},
+	 
+	 {name = "MoveUp", start = 2, count = 2, time =80, loopCount = 0},     
+	 
+	 {name = "MoveDown", start = 11, count = 2, time =80, loopCount = 0},
+	 
+	 {name = "MoveLeft", start = 5 , count = 2, time =80, loopCount = 0},
+	 
+	 {name = "MoveRight", start = 8, count = 2, time =80, loopCount = 0},
+	 
 	 
 }
 
@@ -144,6 +193,7 @@ local touchButton = function(e)
       
 		walkX = 0
 		walkY = 0
+		player:pause()
 	end	
 
 end
@@ -163,7 +213,7 @@ local function update()
 	player.x = player.x + walkX
 	player.y = player.y + walkY
     
-
+    
     player:play() ---executa animação com os frames 
 end
 
