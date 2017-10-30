@@ -7,11 +7,10 @@ application =
 {
 	content =
 	{
-		width = 400,
-		height = 550, 
-		scale = "zoomEven",
+		width = 768,
+		height = 1024, 
+		scale = "letterbox",
 		fps = 60,
-		--audioPlayFrequency = 22050,
 		
 		--[[
 		imageSuffix =
