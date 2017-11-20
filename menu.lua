@@ -13,12 +13,27 @@ local musicMenu = audio.loadSound( "ativos/audio/Root.mp3")
 
 local function gotoJourneOne()
 
-  print("tapped mouthTutorial level button")
+ -- print("tapped mouthTutorial level button")
   audio.stop()
+  
+  display.remove(myGroup)
+  myGroup = nil
+  composer.removeScene("menu", {time = 500})
 
   composer.gotoScene( "game", { time=800, effect="crossFade" } )
+
 end
 
+
+local function gotoCredits()
+
+  --print("tapped credits")
+  audio.stop()
+  display.remove(myGroup)
+  myGroup = nil
+  composer.removeScene("menu", {time = 500})
+  composer.gotoScene( "credits", { time=800, effect="crossFade" } )
+end
 
 
 local function exitGame()
@@ -43,18 +58,20 @@ end
 
 function scene:create(event)
 	
-	local sceneGroup = self.view
-    audio.play(musicMenu)
-    
-    local bg = display.newImage("ativos/img/785.jpg",10,90)
-   -- bg.x = display.contentWidth
-    --bg.y = display.contentHeight
-     
+	
+  local sceneGroup = self.view
+  local phase = event.phase
+  audio.play(musicMenu)
+  local myGroup = display.newGroup()
+  local bg = display.newImageRect(myGroup,"ativos/img/785.jpg",2000,3000)  
+  -- bg.x = display.contentWidth
+  --bg.y = display.contentHeight
+   
 
 
-    local logo = display.newImage("ativos/img/logoGame.png",300,300)
-    logo.x = display.contentCenterX
-    logo.y = 200
+  local logo = display.newImage(myGroup,"ativos/img/logoGame.png",300,300)
+  logo.x = display.contentCenterX
+  logo.y = 200
      
 
 	local loadGame = widget.newButton(
@@ -68,25 +85,26 @@ function scene:create(event)
     }
 	)
 
+  myGroup:insert(loadGame)
 	loadGame.x = display.contentCenterX
 	loadGame.y = display.contentCenterY
     
 
-	local credits = widget.newButton(
+	local creditsScene = widget.newButton(
     {
         width = 200,
         height = 100,
         defaultFile = "ativos/img/Credits.png",
         overFile = "ativos/img/CreditsRed.png",
         --label = "btnLoadGame",
-        onEvent = gotoJourneOne
+        onEvent = gotoCredits
     }
 	)
-
-	credits.x = display.contentCenterX
-	credits.y = display.contentCenterY + 150
+  myGroup:insert(creditsScene)
+	creditsScene.x = display.contentCenterX
+	creditsScene.y = display.contentCenterY + 150
     
-    local exit = widget.newButton(
+  local exit = widget.newButton(
     {
         width = 300,
         height = 100,
@@ -96,7 +114,7 @@ function scene:create(event)
         onEvent = exitGame
     }
 	)
-
+  myGroup:insert(exit)
 	exit.x = display.contentCenterX
 	exit.y = display.contentCenterY + 300
     
@@ -140,7 +158,7 @@ function scene:hide (event)
 	local phase = event.phase
 	
 	if (phase == "will") then
-	
+      
 	elseif (phase == "did") then
 
 		
@@ -156,7 +174,7 @@ function scene:destroy (event)
 	local phase = event.phase
      	
 	if (phase == "will") then
-	
+    composer.removeScene( "menu" )
 	elseif (phase == "did") then
 	
 	end

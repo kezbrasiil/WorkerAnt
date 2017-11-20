@@ -1,0 +1,51 @@
+WorkerAnt:
+
+Eu como jogador, quero entender o contexto geral do jogo e seus objetivos
+
+   # É uma formiguinha trabalhadora que tem como objetivo alimentar seu formigueiro.
+
+
+Possibilite  que ter Menu opções e
+
+Escolher a opção desejada:
+  
+1. Start Game: inicia o jogo
+2. Creditos: ver informações sobre resumida sobre o jogo e o desenvolvedor
+3. Exit Game: sair do jogo
+
+
+1. Start Game: inicia Jornada:
+            A jornada 
+           @  Ter o tempo hábil  para concluir pegar o alimento:  2 minutos - descrecentes
+                           --> 10 segundo para cada fungo consumido
+                           --> caso o tempo seja 0, Game Over.
+           @  Ter um score inicial iniciará: com 1000 pontos.
+                           --> 50 para cada fungo consumido 
+                           --> 1000 escore caso a jornada seja concluida
+           @  Possibilite que caso não consiga na primeira tentativa, tenha mais vidas tentar novamente
+                           --> 3 vidas
+                           --> caso as 3 vidas sejam consumidas, Game Over. Vai para tela de menu
+           @  Direcional: possibilita que player se movimente.
+                       
+                      > para cima: movimenta o jogador  para cima  junto com o cenario
+                      > para baixo: movimenta o jogador para baixo junto com o cenario
+                      > esquerda: movimenta para esquerda dentro dos limites da tela
+                      > direita:  movimenta para direita dentro dos limites da tela  
+           @ O inimigo: possibilite atrasar o player,e em caso de colisão
+                               > remove uma Vida
+                               > subtraia 300 pontos
+                               > 
+
+
+
+Inimigos:
+
+Quando dif
+
+
+Pontuação
+
+
+
+
+
