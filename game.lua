@@ -787,6 +787,7 @@ function scene:create( event )
     --player:insert(workerAntSemAlimento)
     fisica.addBody(player, "dynamic",{friction = 0.5})
     player.gravityScale = 0
+    player.isFixedRotation = true
 
     player.x = 450
     player.y= 1150
@@ -1246,7 +1247,7 @@ function scene:create( event )
     local function restorePlayer()
  
           player.isBodyActive = false
-          player:setLinearVelocity( 0,0 )
+          
         --player.x = display.contentCenterX
         
         if comAlimento == false then
