@@ -1170,6 +1170,27 @@ function scene:create( event )
         myGroup:insert(buttons[i])
             
     end
+
+
+
+    local function removeFormigaPreta(  )
+        -- Remove antBlack which have drifted off screen
+        for i = #formigaPretaTable, 1, -1 do
+            local thisABlack = formigaPretaTable[i]
+
+            if died ==false then
+                if ( thisABlack .x < -100 or
+                 thisABlack .x > display.contentWidth + 100) then
+            
+                    display.remove( thisABlack )
+                    table.remove( formigaPretaTable, i )    
+                end
+            else
+                display.remove( thisABlack )
+                table.remove( formigaPretaTable, i )    
+            end
+        end
+    end
     
     local finalGame = nil
     local function gameOver()
@@ -1191,9 +1212,10 @@ function scene:create( event )
         
         display.remove(uiGroup)
         uiGroup = nil
-        composer.removeScene("game")
-        composer.removeScene("gameover")
-        composer.removeScene("menu")
+        audio.resume(musicGame)
+  --      composer.removeScene("game")
+    --    composer.removeScene("gameover")
+      --  composer.removeScene("menu")
         composer.gotoScene("gameover", {time = 500, effect = "crossFade" })
         
         
@@ -1208,6 +1230,7 @@ function scene:create( event )
            if number == 0 then
                 --cronometro.text ="You Lost!!"
                 --player:stop() 
+                finalGame = "Seu Formigueiro não sobreviveu.\nTente Novamente!"
                 audio.play(audioOps) 
                 audio.play(audioLost) 
                 died = true 
@@ -1308,6 +1331,7 @@ function scene:create( event )
                 audio.play(audioOps)
                 life = life - 1 
                 score = score - 300
+                if (score < 0) then score = 0 end
                 livesText.text = "Lives: " .. life
                 scoreText.text = "Score: " .. score
                 if life == 0 then
@@ -1316,7 +1340,8 @@ function scene:create( event )
                    -- audio.stop()
                    -- audio.dispose(musicGame)
                    -- musicGame = nil
-                    finalGame = "Seu Formigueiro não sobreviveu. Tente Novamente!"
+
+                    finalGame = "Seu Formigueiro não sobreviveu.\nTente Novamente!"
                     timer.performWithDelay( 3000, gameOver)
 
            
@@ -1332,13 +1357,14 @@ function scene:create( event )
                 ( obj1.myName == "fungo1" and obj2.myName == "antWorker" ) )
             then
 
-                audio.play(audioCoin)
-                score = score + 50
-                number = number + 30
-                scoreText.text = "Score: " .. score
-                timeText.text = "tempo: "..number
-                fungo1.isVisible = false
-                
+                if fungo1.isVisible == true then
+                    audio.play(audioCoin)
+                    score = score + 50
+                    number = number + 30
+                    scoreText.text = "Score: " .. score
+                    timeText.text = "tempo: "..number
+                    fungo1.isVisible = false
+                end
              
             end
 
@@ -1346,13 +1372,16 @@ function scene:create( event )
             if ( ( obj1.myName == "antWorker" and obj2.myName == "fungo2" ) or
                 ( obj1.myName == "fungo2" and obj2.myName == "antWorker" ) )
             then
-                audio.play(audioCoin)
-                score = score + 50
-                number = number + 10
-                scoreText.text = "Score: " .. score
-                timeText.text = "tempo: "..number
-               -- fungo2.isBodyActive = false
-                fungo2.isVisible = false
+               
+               if fungo2.isVisible == true then
+                    audio.play(audioCoin)
+                    score = score + 50
+                    number = number + 10
+                    scoreText.text = "Score: " .. score
+                    timeText.text = "tempo: "..number
+                   
+                    fungo2.isVisible = false
+                end
                 
              
             end
@@ -1484,7 +1513,7 @@ function scene:create( event )
                 ( obj1.myName == "formigueiro" and obj2.myName == "antWorker" ) )  then
 
                 if  (comAlimento == true and number > 0 and died == false) then
-                    finalGame = "Seu Formigueiro sobreviveu. Parabens!"
+                    finalGame = "Seu Formigueiro sobreviveu.\n Parabens!"
                     died = true
                     gameOver()
                 end 
@@ -1519,18 +1548,7 @@ function scene:create( event )
     -- Create new AntBlack
         criaFormigaPreta()
 
-    -- Remove antBlack which have drifted off screen
-        for i = #formigaPretaTable, 1, -1 do
-            local thisABlack = formigaPretaTable[i]
-
-            if ( thisABlack .x < -100 or
-                 thisABlack .x > display.contentWidth + 100)
-                
-            then
-                display.remove( thisABlack )
-                table.remove( formigaPretaTable, i )
-            end
-        end
+         removeFormigaPreta()
     end
 
 
@@ -1540,7 +1558,7 @@ function scene:create( event )
 
     local function update()
         
-       if died == false then 
+       if (died == false and player.isBodyActive ~= false) then 
        
             player.x = player.x + walkX
             player.y = player.y + walkY

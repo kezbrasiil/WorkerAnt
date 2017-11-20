@@ -7,47 +7,6 @@ local scene = composer.newScene()
 
 -- Menu music
 local musicMenu = audio.loadSound( "ativos/audio/Root.mp3")
-	
--- Select option sound effect
---local selected = audio.loadSound( "ativos/audio/Ibn_Al_Noor.mp3" )
-
-local function gotoJourneOne()
-
- -- print("tapped mouthTutorial level button")
-  audio.stop()
-  
-  display.remove(myGroup)
-  myGroup = nil
-  composer.removeScene("menu", {time = 500})
-
-  composer.gotoScene( "game", { time=800, effect="crossFade" } )
-
-end
-
-
-local function gotoCredits()
-
-  --print("tapped credits")
-  audio.stop()
-  display.remove(myGroup)
-  myGroup = nil
-  composer.removeScene("menu", {time = 500})
-  composer.gotoScene( "credits", { time=800, effect="crossFade" } )
-end
-
-
-local function exitGame()
-  print("tapped exit button")
-  --audio.play( selected )
-  timer.performWithDelay( 1000,
-    function()
-      if( system.getInfo("platformName")=="Android" ) then
-        native.requestExit()
-      else
-        os.exit()
-      end
-    end )
-end
 
 
 
@@ -73,6 +32,53 @@ function scene:create(event)
   logo.x = display.contentCenterX
   logo.y = 200
      
+
+  
+-- Select option sound effect
+--local selected = audio.loadSound( "ativos/audio/Ibn_Al_Noor.mp3" )
+
+  local function gotoJourneOne()
+
+   -- print("tapped mouthTutorial level button")
+    audio.stop()
+    
+    display.remove(myGroup)
+    myGroup = nil
+    composer.removeScene("menu", {time = 500})
+
+    composer.gotoScene( "game", { time=800, effect="crossFade" } )
+
+  end
+
+
+  local function gotoCredits()
+
+    --print("tapped credits")
+    audio.stop()
+    display.remove(myGroup)
+    myGroup = nil
+    composer.removeScene("menu", {time = 500})
+    composer.gotoScene( "credits", { time=800, effect="crossFade" } )
+  end
+
+
+  local function exitGame()
+    print("tapped exit button")
+    --audio.play( selected )
+    timer.performWithDelay( 1000,
+      function()
+        if( system.getInfo("platformName")=="Android" ) then
+          native.requestExit()
+        else
+          os.exit()
+        end
+      end )
+  end
+
+
+
+
+
 
 	local loadGame = widget.newButton(
     {
