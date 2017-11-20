@@ -19,6 +19,7 @@ local scene = composer.newScene()
 function scene:create()
 	local sceneGroup = self.view
 
+	composer.removeScene( "menu")
 	local background = display.newImageRect("ativos/img/tronco.png", 1500,3000)
 	--background.x = display.contentCenterX 
 	--background.y = display.contentCenterY

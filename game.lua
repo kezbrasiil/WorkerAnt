@@ -42,7 +42,8 @@ function scene:create( event )
     myGroup:insert(background)
     background.x = display.contentCenterX
     background.y = posicaoFundoY
-   -- fisica.addBody(background,"static" ,{friction = 0.5})
+  --  fisica.addBody(background,"static" ,{friction = 0.3})
+   -- background.gravityScale = 1.0   
      
     -----cenario composto de arbutos que servirá de obstatuculo para nossa personagem
     ---- primeira linha horizontal
@@ -803,7 +804,7 @@ function scene:create( event )
     -- cronometro.x = _W/2
     -- cronometro.y = 20
     --cronometro:setTextColor( 0, 255, 0 )
-    local tempo = 3000 
+    local tempo = 1000 
 
 
     local uiGroup  = display.newGroup( )
@@ -1063,6 +1064,10 @@ function scene:create( event )
         print (background.y)
         print ("cenario ciclo "..contador)
         print("player y "..player.y.." player.x "..player.x)
+        print()
+       -- print("Audio Principal "..audio.seek(4000,musicGame))
+        print("Vidas "..life)
+
         if (e.phase =="began" or e.phase =="moved") then
 
             if comAlimento == false then
@@ -1199,12 +1204,14 @@ function scene:create( event )
          -- cronometro.text = number
         if number <=30 then
          --   cronometro:setTextColor( 255, 0, 0 )
-            tempo = 1000
+            tempo = 500
            if number == 0 then
                 --cronometro.text ="You Lost!!"
-                --player:stop()   
+                --player:stop() 
+                audio.play(audioOps) 
+                audio.play(audioLost) 
                 died = true 
-                gameOver()
+                timer.performWithDelay( 3000, gameOver)
 
            end
 
@@ -1215,31 +1222,32 @@ function scene:create( event )
 
     local function restorePlayer()
  
-        --player.isBodyActive = false
+          player.isBodyActive = false
+          player:setLinearVelocity( 0,0 )
         --player.x = display.contentCenterX
         
         if comAlimento == false then
             if player.setSequence == "MoveUp" then
             --    player.rotation = 0
-                player:setFrame(1)
-                player.y = player.y + 150
+                player:setSequence("IdleUp")         
+                player.y = player.y + 200
             elseif player.setSequence == "MoveDown"  then
-                player:setFrame(10)
-                player.y = player.y - 150
+                player:setSequence("IdleDown")         
+                player.y = player.y - 200
             --    player.rotation = 0
             else 
                  player.y = player.y
-                 player:setFrame(4)           
+                 player:setSequence("IdleLeft")           
             --     player.rotation = 0      
             end
         else
             if player.setSequence == "MoveUpA" then
             --    player.rotation = 0
-                player:setFrame(13)
-                player.y = player.y + 150
+                player:setSequence("IdleUpA")         
+                player.y = player.y + 200
             elseif player.setSequence == "MoveDownA"  then
-                player:setFrame(10)
-                player.y = player.y - 150
+                player:setSequence("IdleDownA")         
+                player.y = player.y - 200
             --    player.rotation = 0
             else 
                  player.y = player.y
@@ -1248,15 +1256,18 @@ function scene:create( event )
             end
         end    
     -- Fade in the player
-        transition.to( player, { alpha=1, time=2500,
-        onComplete = function()
-      --    fisica.addBody(player,"dynamic",{friction=0.5}) 
-     --   player.isBodyActive = true
-       --   player.gravityScale = 0 
-       -- player:applyLinearImpulse(0,0,player.x,player.y) 
-      --died = false
-        end
-        } )
+      if (died==false) then
+          
+      
+            transition.to( player, { alpha=1, time=2500,
+            onComplete = function()
+          
+                           player.isBodyActive = true
+           
+                        end
+            } )
+    
+      end  
     end
 
 
@@ -1270,9 +1281,10 @@ function scene:create( event )
             if ( ( obj1.myName == "antWorker" and obj2.myName == "folha" ) or
                 ( obj1.myName == "folha" and obj2.myName == "antWorker" ) )
             then
-
-                audio.play(audioSucesso)
-                score = score + 500
+                if comAlimento == false then
+                    audio.play(audioSucesso)
+                    score = score + 500
+                end
                 comAlimento = true
                 --sheet = graphics.newImageSheet("ativos/img/WorkerAntSheet.png",sheetData)
                 
@@ -1305,7 +1317,7 @@ function scene:create( event )
                    -- audio.dispose(musicGame)
                    -- musicGame = nil
                     finalGame = "Seu Formigueiro não sobreviveu. Tente Novamente!"
-                    gameOver()
+                    timer.performWithDelay( 3000, gameOver)
 
            
                 else
@@ -1348,63 +1360,63 @@ function scene:create( event )
 
 
 
-            if ( ( obj1.myName == "antWorker" and obj2.myName == "arbustos" ) or
-                ( obj1.myName == "arbustos" and obj2.myName == "antWorker" ) ) then
+            -- if ( ( obj1.myName == "antWorker" and obj2.myName == "arbustos" ) or
+            --     ( obj1.myName == "arbustos" and obj2.myName == "antWorker" ) ) then
                 
-                if comAlimento ==false then
+            --     if comAlimento ==false then
 
-                    if (player.setSequence=="MoveUp") then
+            --         if (player.setSequence=="MoveUp") then
 
-                        player.y = player.y + 100
-                        player:setSequence("IdleUp")
-                        moveCenarioParaBaixo()
+            --             player.y = player.y + 100
+            --             player:setSequence("IdleUp")
+            --             moveCenarioParaBaixo()
                         
-                    elseif (player.setSequence=="MoveDown") then
+            --         elseif (player.setSequence=="MoveDown") then
                     
-                        player.y = player.y - 100
-                        player:setSequence("IdleDown")
-                        moveCenarioParaBaixo()
+            --             player.y = player.y - 100
+            --             player:setSequence("IdleDown")
+            --             moveCenarioParaBaixo()
 
-                    elseif (player.setSequence=="MoveLeft") then
+            --         elseif (player.setSequence=="MoveLeft") then
 
-                        player.x = player.x + 100
-                        player:setSequence("IdleLeft")
+            --             player.x = player.x + 100
+            --             player:setSequence("IdleLeft")
                         
 
-                    elseif (player.setSequence=="MoveRight") then    
+            --         elseif (player.setSequence=="MoveRight") then    
 
-                        player.x = player.x - 100
-                        player:setSequence("IdleRight")
+            --             player.x = player.x - 100
+            --             player:setSequence("IdleRight")
 
-                    end
-                else
-                    if (player.setSequence=="MoveUpA") then
+            --         end
+            --     else
+            --         if (player.setSequence=="MoveUpA") then
 
-                        player.y = player.y + 100
-                        player:setSequence("IdleUpA")
-                        moveCenarioParaBaixo()
+            --             player.y = player.y + 100
+            --             player:setSequence("IdleUpA")
+            --             moveCenarioParaBaixo()
                         
-                    elseif (player.setSequence=="MoveDownA") then
+            --         elseif (player.setSequence=="MoveDownA") then
                     
-                        player.y = player.y - 100
-                        player:setSequence("IdleDownA")
-                        moveCenarioParaBaixo()
+            --             player.y = player.y - 100
+            --             player:setSequence("IdleDownA")
+            --             moveCenarioParaBaixo()
 
-                    elseif (player.setSequence=="MoveLeftA") then
+            --         elseif (player.setSequence=="MoveLeftA") then
 
-                        player.x = player.x + 100
-                        player:setSequence("IdleLeftA")
+            --             player.x = player.x + 100
+            --             player:setSequence("IdleLeftA")
                         
 
-                    elseif (player.setSequence=="MoveRightA") then    
+            --         elseif (player.setSequence=="MoveRightA") then    
 
-                        player.x = player.x + 100
-                        player:setSequence("IdleRightA")
+            --             player.x = player.x + 100
+            --             player:setSequence("IdleRightA")
 
-                    end    
-                end    
-                ----Tela de parabens-----
-            end
+            --         end    
+            --     end    
+            --     ----Tela de parabens-----
+       --     end
 
 
             if (( obj1.myName == "antWorker" and obj2.myName == "pedra" ) or
@@ -1473,6 +1485,7 @@ function scene:create( event )
 
                 if  (comAlimento == true and number > 0 and died == false) then
                     finalGame = "Seu Formigueiro sobreviveu. Parabens!"
+                    died = true
                     gameOver()
                 end 
                 ----Tela de parabens-----
@@ -1482,7 +1495,7 @@ function scene:create( event )
     end
 
 
-    
+    Runtime:addEventListener( "collision", onCollision )
 
 
 
@@ -1522,6 +1535,9 @@ function scene:create( event )
 
 
 
+    gameLoopTimer = timer.performWithDelay( tempo, gameLoop, 0 )
+
+
     local function update()
         
        if died == false then 
@@ -1537,12 +1553,9 @@ function scene:create( event )
         
     end
 
-
-
-
     Runtime:addEventListener("enterFrame", update)
-    gameLoopTimer = timer.performWithDelay( 500, gameLoop, 0 )
-    Runtime:addEventListener( "collision", onCollision )
+    
+    
 
  
 end
